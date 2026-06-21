@@ -20,10 +20,10 @@ def code(src):
 
 # ---------------------------------------------------------------------------
 md(r"""
-# NASA Galaxies & Stars — Morphology Clustering and an Illustrative Habitability Classifier with CNNs
+# NASA Galaxies & Stars - Morphology Clustering and an Illustrative Habitability Classifier with CNNs
 
 **Author:** generated for the *NASA-Galaxies-morphology-classification-with-CNNs* project
-**Data source:** [NASA Image and Video Library](https://images.nasa.gov) — public REST API (`images-api.nasa.gov`), **no API key required**.
+**Data source:** [NASA Image and Video Library](https://images.nasa.gov) - public REST API (`images-api.nasa.gov`), **no API key required**.
 
 ---
 
@@ -33,13 +33,13 @@ md(r"""
 2. **Pre-processes** them into a uniform tensor dataset.
 3. Trains a **convolutional auto-encoder (a CNN)** to learn a compact visual feature representation.
 4. **Clusters** the learned features (K-Means) to group the images into morphological families and inspects each cluster.
-5. At the very end, *for laughs*, trains a CNN to predict whether a galaxy is "habitable" — see the joke appendix.
+5. At the very end, *for laughs*, trains a CNN to predict whether a galaxy is "habitable" - see the joke appendix.
 
 ## A note on what's serious here and what isn't
 
 The real, defensible work is the unsupervised **morphology clustering** in section 5: a CNN learns visual features from NASA imagery without labels, and K-Means groups them into visually coherent families.
 
-There's also a deliberately silly **appendix** at the end ("The Galaxy Life-Detector 9000™") where we train a CNN to predict an entirely fabricated "does this galaxy host life?" label. It's included as a joke — and as a runnable supervised-CNN example. Treat its predictions as cosmic entertainment, not astrobiology.
+There's also a deliberately silly **appendix** at the end ("The Galaxy Life-Detector 9000™") where we train a CNN to predict an entirely fabricated "does this galaxy host life?" label. It's included as a joke - and as a runnable supervised-CNN example. Treat its predictions as cosmic entertainment, not astrobiology.
 
 ## A note on running this notebook
 
@@ -77,10 +77,10 @@ try:
     import tensorflow as tf
     tf.random.set_seed(SEED)
     TF_AVAILABLE = True
-    print("TensorFlow", tf.__version__, "available — using real CNNs.")
+    print("TensorFlow", tf.__version__, "available - using real CNNs.")
 except Exception as e:                       # pragma: no cover
     TF_AVAILABLE = False
-    print("TensorFlow not available (", e, ") — falling back to sklearn.")
+    print("TensorFlow not available (", e, ") - falling back to sklearn.")
 
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -91,7 +91,7 @@ import requests
 md(r"""
 ## 2. Acquiring images from the NASA Image and Video Library
 
-The NASA Images API is a plain public REST endpoint — **no API key, no authentication**:
+The NASA Images API is a plain public REST endpoint - **no API key, no authentication**:
 
 ```
 GET https://images-api.nasa.gov/search?q=galaxy&media_type=image
@@ -177,9 +177,9 @@ md(r"""
 If NASA is unreachable, we synthesise plausible-looking images so the pipeline
 still demonstrates real behaviour:
 
-* **Galaxies** — a bright central bulge plus logarithmic spiral arms (spiral) or a
+* **Galaxies** - a bright central bulge plus logarithmic spiral arms (spiral) or a
   smooth elongated light profile (elliptical), over a faint star field.
-* **Star clusters** — a dark sky scattered with point-like sources (2-D Gaussian
+* **Star clusters** - a dark sky scattered with point-like sources (2-D Gaussian
   PSFs) of varying brightness.
 """)
 
@@ -281,11 +281,11 @@ def show_grid(images, titles=None, rows=3, cols=6, figtitle=None):
     plt.show()
 
 show_grid(X[:18], [CATEGORY_NAMES[c] for c in y_cat[:18]],
-          figtitle=f"Sample images — {DATA_SOURCE}")
+          figtitle=f"Sample images - {DATA_SOURCE}")
 """)
 
 code(r"""
-# Pixel-intensity distribution by category — a quick sanity check.
+# Pixel-intensity distribution by category - a quick sanity check.
 plt.figure(figsize=(7, 4))
 for i, name in enumerate(CATEGORY_NAMES):
     vals = X[y_cat == i].mean(axis=(1, 2, 3))
@@ -296,7 +296,7 @@ plt.title("Mean brightness by category"); plt.legend(); plt.show()
 
 # ---------------------------------------------------------------------------
 md(r"""
-## 4. CNN feature learning — a convolutional auto-encoder
+## 4. CNN feature learning - a convolutional auto-encoder
 
 We train a **convolutional auto-encoder**: the *encoder* compresses each 64×64×3
 image down to a `LATENT_DIM`-dimensional vector, and the *decoder* reconstructs
@@ -427,7 +427,7 @@ for c in range(best_k):
     if len(idx) == 0:
         continue
     show_grid(X[idx], [f"cl{c}"] * len(idx), rows=1, cols=6,
-              figtitle=f"Cluster {c} — {len(np.where(cluster_labels==c)[0])} images")
+              figtitle=f"Cluster {c} - {len(np.where(cluster_labels==c)[0])} images")
 """)
 
 # ---------------------------------------------------------------------------
@@ -442,24 +442,18 @@ md(r"""
   the original galaxy / star-cluster search terms.
 
 **Limitations:**
-* Sample sizes are tiny (tens of images) — fine for a demo, not for publishable results.
+* Sample sizes are tiny (tens of images) - fine for a demo, not for publishable results.
 * NASA search results are heterogeneous (diagrams, mosaics, captions baked into images),
   so real downloads are noisier than the synthetic fallback.
-
-**Possible next steps:**
-* Swap the toy auto-encoder for a pretrained backbone (e.g. ResNet) fine-tuned on a
-  labelled morphology set such as **Galaxy Zoo / Galaxy10**.
-* Add a real supervised target — spiral-vs-elliptical morphology, redshift bins,
-  or exoplanet-transit light-curve classification.
 
 *(For the deeply unserious finale, scroll on to the appendix.)*
 """)
 
 # ---------------------------------------------------------------------------
 md(r"""
-## 🛸 Appendix — *The Galaxy Life-Detector 9000™*
+## 🛸 Appendix - *The Galaxy Life-Detector 9000™*
 
-> *"Is this picture of a galaxy alive?"* — nobody serious, ever.
+> *"Is this picture of a galaxy alive?"* - nobody serious, ever.
 
 Welcome to the deeply unscientific portion of the notebook. SETI has spent
 decades scanning the cosmos with billion-dollar radio telescopes and largely
@@ -468,16 +462,16 @@ three-layer CNN. Results may vary by approximately ∞.
 
 The bit: there is **no ground-truth dataset of "images that contain life"**, so
 we just make one up. Our `habitability_proxy()` declares a galaxy "habitable" if
-it has moderate brightness and high local structure — a rule with the
+it has moderate brightness and high local structure - a rule with the
 scientific rigour of *vibes*. We then train a real CNN to learn this rule,
 which it does, beautifully and incorrectly, in the only sense the universe
 cares about.
 
-If the model tells you a galaxy hosts life, please do **not** call NASA — they
+If the model tells you a galaxy hosts life, please do **not** call NASA - they
 are busy. Real astrobiology uses **transmission spectroscopy of exoplanet
 atmospheres**, not deep learning on cropped Hubble screenshots.
 
-**TL;DR** — this section trains a real CNN to predict a fake label very well.
+**TL;DR** - this section trains a real CNN to predict a fake label very well.
 It is the machine-learning equivalent of teaching a parrot to say *"I am
 conscious"*: impressive engineering, philosophically irrelevant.
 """)
